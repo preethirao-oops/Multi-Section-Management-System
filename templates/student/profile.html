@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - SectionSync</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #f7f7fb;
+            color: #25233d;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 250px;
+            height: 100vh;
+
+            background: #25233d;
+
+            padding: 25px 15px;
+
+            color: white;
+        }
+
+
+        .logo {
+            padding: 10px 15px 30px;
+        }
+
+
+        .logo h1 {
+            font-size: 25px;
+        }
+
+
+        .logo p {
+
+            font-size: 13px;
+
+            color: #b9b6c9;
+
+            margin-top: 5px;
+        }
+
+
+        .menu {
+            list-style: none;
+        }
+
+
+        .menu-item {
+            margin-bottom: 8px;
+        }
+
+
+        .menu-link {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            width: 100%;
+
+            padding: 13px 15px;
+
+            color: #ddd;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            background: transparent;
+
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            text-align: left;
+        }
+
+
+        .menu-link:hover {
+
+            background: rgba(216, 197, 255, 0.12);
+        }
+
+
+        .menu-link.active {
+
+            background: #d8c5ff;
+
+            color: #25233d;
+        }
+
+
+        .icon {
+
+            width: 20px;
+
+            text-align: center;
+        }
+
+
+        /* =========================
+           SECTION DROPDOWN
+        ========================= */
+
+        .section-header {
+
+            display: flex;
+
+            align-items: center;
+
+            width: 100%;
+
+            gap: 12px;
+        }
+
+
+        .section-header span:nth-child(2) {
+
+            flex: 1;
+
+            text-align: left;
+        }
+
+
+        .arrow {
+            font-size: 13px;
+        }
+
+
+        .submenu {
+
+            display: block;
+
+            margin-left: 20px;
+
+            margin-top: 5px;
+        }
+
+
+        .submenu a {
+
+            display: block;
+
+            padding: 10px 12px;
+
+            color: #b9b6c9;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            border-radius: 7px;
+        }
+
+
+        .submenu a:hover {
+
+            background: rgba(216, 197, 255, 0.1);
+
+            color: white;
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================= */
+
+        .logout {
+
+            position: absolute;
+
+            bottom: 25px;
+
+            left: 15px;
+
+            right: 15px;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+
+            margin-left: 250px;
+
+            min-height: 100vh;
+
+            padding: 40px;
+        }
+
+
+        .page-header {
+
+            margin-bottom: 30px;
+        }
+
+
+        .page-header h2 {
+
+            font-size: 28px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .page-header p {
+
+            color: #777;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           PROFILE CARD
+        ========================= */
+
+        .profile-card {
+
+            background: white;
+
+            border: 1px solid #e7e5ef;
+
+            border-radius: 14px;
+
+            padding: 32px;
+
+            max-width: 950px;
+
+            box-shadow:
+                0 5px 20px rgba(37, 35, 61, 0.05);
+        }
+
+
+        /* =========================
+           PROFILE TOP
+        ========================= */
+
+        .profile-top {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding-bottom: 25px;
+
+            border-bottom: 1px solid #eeeeee;
+        }
+
+
+        .profile-avatar {
+
+            width: 65px;
+
+            height: 65px;
+
+            border-radius: 50%;
+
+            background: #e9ddff;
+
+            color: #713ce6;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 26px;
+
+            font-weight: bold;
+        }
+
+
+        .profile-top h3 {
+
+            font-size: 23px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .profile-top p {
+
+            color: #777;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           INFORMATION
+        ========================= */
+
+        .profile-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+
+            margin-top: 28px;
+        }
+
+
+        .info-card {
+
+            padding: 20px;
+
+            background: #f8f7fc;
+
+            border: 1px solid #ebe9f2;
+
+            border-radius: 10px;
+        }
+
+
+        .info-label {
+
+            display: block;
+
+            color: #777;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .info-value {
+
+            display: block;
+
+            color: #25233d;
+
+            font-size: 16px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+
+                margin-left: 210px;
+
+                padding: 25px;
+            }
+
+            .profile-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =================================
+         SIDEBAR
+    ================================== -->
+
+    <div class="sidebar">
+
+
+        <div class="logo">
+
+            <h1>SectionSync</h1>
+
+            <p>Student Portal</p>
+
+        </div>
+
+
+        <ul class="menu">
+
+
+            <!-- Dashboard -->
+
+            <li class="menu-item">
+
+                <a href="/student/dashboard"
+                   class="menu-link">
+
+                    <span class="icon">⌂</span>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+            </li>
+
+
+            <!-- My Profile -->
+
+            <li class="menu-item">
+
+                <a href="/student/profile"
+                   class="menu-link active">
+
+                    <span class="icon">●</span>
+
+                    <span>My Profile</span>
+
+                </a>
+
+            </li>
+
+
+            <!-- Fee Verification -->
+
+            <li class="menu-item">
+
+                <a href="/student/fee-verification"
+                   class="menu-link">
+
+                    <span class="icon">▣</span>
+
+                    <span>Fee Verification</span>
+
+                </a>
+
+            </li>
+
+
+            <!-- Section Preferences -->
+
+            <li class="menu-item">
+
+
+                <button
+                    type="button"
+                    class="menu-link"
+                    onclick="toggleDropdown()"
+                >
+
+                    <div class="section-header">
+
+                        <span class="icon">▣</span>
+
+                        <span>Section Preferences</span>
+
+                        <span class="arrow"
+                              id="arrow">⌃</span>
+
+                    </div>
+
+                </button>
+
+
+                <div class="submenu"
+                     id="submenu">
+
+                    <a href="/student/live-basket-filling">
+
+                        Live Basket Filling
+
+                    </a>
+
+
+                    <a href="/student/section-preferences">
+
+                        Preferred Sections
+
+                    </a>
+
+                </div>
+
+            </li>
+
+
+            <!-- Allocation Status -->
+
+            <li class="menu-item">
+
+                <a href="/student/allocation-status"
+                   class="menu-link">
+
+                    <span class="icon">◔</span>
+
+                    <span>Allocation Status</span>
+
+                </a>
+
+            </li>
+
+
+        </ul>
+
+
+        <!-- Logout -->
+
+        <div class="logout">
+
+            <a href="/"
+               class="menu-link">
+
+                <span class="icon">↪</span>
+
+                <span>Logout</span>
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================
+         MAIN CONTENT
+    ================================== -->
+
+    <div class="main">
+
+
+        <div class="page-header">
+
+            <h2>My Profile</h2>
+
+            <p>
+                View your personal and academic information
+            </p>
+
+        </div>
+
+
+
+        <div class="profile-card">
+
+
+            <!-- Profile Header -->
+
+            <div class="profile-top">
+
+
+                <div class="profile-avatar">
+
+                    {{ student["student_name"][0] }}
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        {{ student["student_name"] }}
+                    </h3>
+
+                    <p>
+                        Student Profile
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- Profile Information -->
+
+            <div class="profile-grid">
+
+
+                <!-- Enrollment Number -->
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Enrollment Number
+                    </span>
+
+                    <span class="info-value">
+                        {{ student["enrollment_no"] }}
+                    </span>
+
+                </div>
+
+
+                <!-- Name -->
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Name
+                    </span>
+
+                    <span class="info-value">
+                        {{ student["student_name"] }}
+                    </span>
+
+                </div>
+
+
+                <!-- DOB -->
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Date of Birth
+                    </span>
+
+                    <span class="info-value">
+                        {{ student["dob"] or "Not available" }}
+                    </span>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Email
+                    </span>
+
+                    <span class="info-value">
+                        {{ student["email"] or "Not available" }}
+                    </span>
+
+                </div>
+
+
+                <!-- Program -->
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Program
+                    </span>
+
+                    <span class="info-value">
+                        {{ student["program"] }}
+                    </span>
+
+                </div>
+
+
+                <!-- Batch -->
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Batch
+                    </span>
+
+                    <span class="info-value">
+                        {{ student["batch"] or "2024-2028" }}
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+
+        function toggleDropdown() {
+
+            const submenu =
+                document.getElementById("submenu");
+
+            const arrow =
+                document.getElementById("arrow");
+
+
+            if (submenu.style.display === "none") {
+
+                submenu.style.display = "block";
+
+                arrow.textContent = "⌃";
+
+            } else {
+
+                submenu.style.display = "none";
+
+                arrow.textContent = "⌄";
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

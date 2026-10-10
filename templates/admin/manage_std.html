@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Students - SectionSync</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fa;
+            color: #18345d;
+        }
+
+
+        /* TOP HEADER */
+
+        .header {
+            height: 76px;
+
+            background: white;
+
+            border-bottom: 1px solid #dfe3ea;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 35px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+
+            color: #15365f;
+        }
+
+        .header-right {
+            font-size: 14px;
+
+            color: #15365f;
+        }
+
+        .header-right span {
+            margin: 0 10px;
+
+            color: #777;
+        }
+
+
+        /* MAIN */
+
+        .main {
+            padding: 30px;
+
+            max-width: 1400px;
+
+            margin: auto;
+        }
+
+
+        /* PAGE HEADING */
+
+        .page-heading {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .page-heading h2 {
+            font-size: 24px;
+
+            margin-bottom: 6px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+
+        /* UPLOAD BUTTON */
+
+        .upload-btn {
+            background: #2874d8;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        .upload-btn:hover {
+            background: #1f63bd;
+        }
+
+
+        /* SEARCH AREA */
+
+        .search-card {
+            background: white;
+
+            border: 1px solid #dfe3ea;
+
+            border-radius: 10px;
+
+            padding: 18px;
+
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+
+            gap: 12px;
+
+            align-items: center;
+        }
+
+        .search-input {
+            width: 320px;
+
+            padding: 11px 13px;
+
+            border: 1px solid #cfd6e0;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #2874d8;
+        }
+
+        .program-select {
+            padding: 11px 13px;
+
+            border: 1px solid #cfd6e0;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            background: white;
+
+            min-width: 130px;
+        }
+
+        .search-button {
+            background: #17375e;
+
+            color: white;
+
+            border: none;
+
+            padding: 11px 20px;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background: #102c4d;
+        }
+
+
+        /* TABLE */
+
+        .table-container {
+            background: white;
+
+            border: 1px solid #dfe3ea;
+
+            border-radius: 10px;
+
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 950px;
+        }
+
+        thead {
+            background: #f5f7fa;
+        }
+
+        th {
+            text-align: left;
+
+            padding: 15px;
+
+            font-size: 13px;
+
+            color: #17375e;
+
+            font-weight: 600;
+
+            border-bottom: 1px solid #dfe3ea;
+
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 15px;
+
+            font-size: 14px;
+
+            color: #17375e;
+
+            border-bottom: 1px solid #e8ebef;
+
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: #fafbfc;
+        }
+
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        .verified {
+            background: #dff5e8;
+
+            color: #159447;
+        }
+
+        .pending {
+            background: #fff0d4;
+
+            color: #d98900;
+        }
+
+        .not-verified {
+            background: #ffe1e1;
+
+            color: #d93636;
+        }
+
+
+        /* ACTION BUTTONS */
+
+        .edit-btn {
+            background: #e5edff;
+
+            color: #2864c7;
+
+            border: none;
+
+            padding: 8px 13px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            margin-right: 5px;
+        }
+
+        .edit-btn:hover {
+            background: #d7e4ff;
+        }
+
+        .delete-btn {
+            background: #ffe3e3;
+
+            color: #e93636;
+
+            border: none;
+
+            padding: 8px 13px;
+
+            border-radius: 6px;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #ffd3d3;
+        }
+
+
+        /* EMPTY */
+
+        .empty {
+            text-align: center;
+
+            padding: 45px;
+
+            color: #7b8798;
+
+            font-size: 14px;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 0 18px;
+            }
+
+            .header h1 {
+                font-size: 21px;
+            }
+
+            .header-right {
+                font-size: 12px;
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+            .page-heading {
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .search-form {
+                flex-wrap: wrap;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            Manage Students
+        </h1>
+
+        <div class="header-right">
+
+            Admin
+
+            <span>|</span>
+
+            SectionSync
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+
+        <!-- PAGE HEADING -->
+
+        <div class="page-heading">
+
+            <div>
+
+                <h2>
+                    Student Management
+                </h2>
+
+                <p>
+                    View, edit and manage registered students.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/admin/student-upload"
+                class="upload-btn"
+            >
+                📁 Upload Excel
+            </a>
+
+        </div>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-card">
+
+            <form
+                method="GET"
+                action="/admin/student-management"
+                class="search-form"
+            >
+
+                <input
+                    type="text"
+                    name="search"
+                    class="search-input"
+                    placeholder="Search by enrollment number or name..."
+                    value="{{ search }}"
+                >
+
+
+                <select
+                    name="program"
+                    class="program-select"
+                >
+
+                    <option value="">
+                        All Programs
+                    </option>
+
+                    <option
+                        value="CSE"
+                        {% if program == "CSE" %}selected{% endif %}
+                    >
+                        CSE
+                    </option>
+
+                    <option
+                        value="AI&DS"
+                        {% if program == "AI&DS" %}selected{% endif %}
+                    >
+                        AI & DS
+                    </option>
+
+                    <option
+                        value="AI&ML"
+                        {% if program == "AI&ML" %}selected{% endif %}
+                    >
+                        AI & ML
+                    </option>
+
+                    <option
+                        value="AI"
+                        {% if program == "AI" %}selected{% endif %}
+                    >
+                        AI
+                    </option>
+
+                    <option
+                        value="EEE"
+                        {% if program == "EEE" %}selected{% endif %}
+                    >
+                        EEE
+                    </option>
+
+                    <option
+                        value="ECE"
+                        {% if program == "ECE" %}selected{% endif %}
+                    >
+                        ECE
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="submit"
+                    class="search-button"
+                >
+                    Search
+                </button>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- STUDENT TABLE -->
+
+        <div class="table-container">
+
+            {% if students %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Enrollment No.
+                        </th>
+
+                        <th>
+                            Student Name
+                        </th>
+
+                        <th>
+                            Program
+                        </th>
+
+                        <th>
+                            CGPA
+                        </th>
+
+                        <th>
+                            Fee Status
+                        </th>
+
+                        <th>
+                            Allocation
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <td>
+                            {{ student["enrollment_no"] }}
+                        </td>
+
+
+                        <td>
+                            {{ student["student_name"] }}
+                        </td>
+
+
+                        <td>
+                            {{ student["program"] }}
+                        </td>
+
+
+                        <td>
+                            {{ student["cgpa"] if student["cgpa"] else "—" }}
+                        </td>
+
+
+                        <td>
+
+                            {% if student["fee_status"] == "Verified" %}
+
+                                <span class="status verified">
+                                    Verified
+                                </span>
+
+                            {% elif student["fee_status"] == "Pending" %}
+
+                                <span class="status pending">
+                                    Pending
+                                </span>
+
+                            {% else %}
+
+                                <span class="status not-verified">
+                                    Not Verified
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ student["allocation"] if student["allocation"] else "Not Allocated" }}
+                        </td>
+
+
+                        <td>
+
+                            <a
+                                href="/admin/edit-student/{{ student['id'] }}"
+                                class="edit-btn"
+                            >
+                                Edit
+                            </a>
+
+
+                            <form
+                                method="POST"
+                                action="/admin/delete-student/{{ student['id'] }}"
+                                style="display:inline;"
+                                onsubmit="return confirm('Are you sure you want to delete this student?');"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="delete-btn"
+                                >
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            {% else %}
+
+            <div class="empty">
+
+                No students found.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

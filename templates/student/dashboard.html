@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7fb;
+            color: #17203b;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #25233d;
+            color: white;
+            padding: 30px 14px;
+        }
+
+        .logo {
+            padding-left: 13px;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 25px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            font-size: 13px;
+            color: #d4d0e8;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 8px;
+        }
+
+        .menu-link {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            text-align: left;
+        }
+
+        .menu-link:hover {
+            background: #302d4b;
+        }
+
+        .menu-link.active {
+            background: #d8c5ff;
+            color: #19182e;
+        }
+
+        .icon {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+
+        /* ================= SECTION DROPDOWN ================= */
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .section-header .arrow {
+            margin-left: auto;
+            font-size: 10px;
+            transition: 0.2s;
+        }
+
+        .section-dropdown.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            display: none;
+            margin-left: 33px;
+            border-left: 1px solid #57536d;
+            padding-left: 10px;
+            margin-top: 2px;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+        .submenu a {
+            display: block;
+            color: #eeeeF5;
+            text-decoration: none;
+            padding: 10px 10px;
+            font-size: 13px;
+            border-radius: 5px;
+        }
+
+        .submenu a:hover {
+            background: #302d4b;
+        }
+
+
+        /* ================= LOGOUT ================= */
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 14px;
+            right: 14px;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+
+        /* ================= TOP BAR ================= */
+
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 28px;
+            border-bottom: 1px solid #e5e3eb;
+        }
+
+        .profile-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification {
+            width: 20px;
+            height: 20px;
+            background: #e23851;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #eeeafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 21px;
+        }
+
+        .user-details {
+            line-height: 1.3;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: #71809b;
+        }
+
+        .top-arrow {
+            margin-left: 5px;
+        }
+
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            padding: 12px 35px 30px;
+        }
+
+
+        /* ================= WELCOME ================= */
+
+        .welcome-card {
+            background: white;
+            border: 1px solid #e4e0ec;
+            border-radius: 15px;
+            padding: 35px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 23px;
+        }
+
+        .welcome-card h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+            color: #172b51;
+        }
+
+        .welcome-card p {
+            color: #68738e;
+            font-size: 14px;
+        }
+
+        .welcome-image {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: #eee8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+        }
+
+
+        /* ================= SUMMARY CARDS ================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 23px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2dfea;
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 9px;
+            background: #f0eaff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #713ce6;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 12px;
+            color: #71809b;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #17203b;
+        }
+
+        .pending {
+            color: #e18b00;
+        }
+
+        .verified {
+            color: #15966a;
+        }
+
+
+        /* ================= BOTTOM ================= */
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1.55fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e2dfea;
+            border-radius: 13px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e8e5ee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+        }
+
+        .view-btn {
+            background: white;
+            border: 1px solid #7845e8;
+            color: #7845e8;
+            padding: 8px 13px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .view-btn:hover {
+            background: #7845e8;
+            color: white;
+        }
+
+        .panel-body {
+            padding: 12px 22px;
+        }
+
+        .preference {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eeeef3;
+        }
+
+        .preference:last-child {
+            border-bottom: none;
+        }
+
+        .preference-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .number {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: #eee8ff;
+            color: #7140d9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .badge {
+            background: #e7f6ef;
+            color: #249261;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 10px;
+        }
+
+        .notice-content {
+            padding: 23px;
+        }
+
+        .notice-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .notice-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #6c7891;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 15px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .welcome-image {
+                display: none;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+
+    <div class="logo">
+
+        <h1>
+            SectionSync
+        </h1>
+
+        <p>
+            Student Portal
+        </p>
+
+    </div>
+
+
+    <ul class="menu">
+
+
+        <!-- DASHBOARD -->
+
+        <li class="menu-item">
+
+            <a
+                href="/student/dashboard"
+                class="menu-link active"
+            >
+
+                <span class="icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <!-- PROFILE -->
+
+        <li class="menu-item">
+
+            <a
+                href="/student/profile"
+                class="menu-link"
+            >
+
+                <span class="icon">
+                    ●
+                </span>
+
+                <span>
+                    My Profile
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <!-- FEE VERIFICATION -->
+
+        <li class="menu-item">
+
+            <a
+                href="/student/fee-verification"
+                class="menu-link"
+            >
+
+                <span class="icon">
+                    ▣
+                </span>
+
+                <span>
+                    Fee Verification
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <!-- SECTION PREFERENCES -->
+
+        <li
+            class="menu-item section-dropdown"
+            id="sectionDropdown"
+        >
+
+            <button
+                type="button"
+                class="menu-link"
+                onclick="toggleDropdown()"
+            >
+
+                <div class="section-header">
+
+                    <span class="icon">
+                        ▣
+                    </span>
+
+                    <span>
+                        Section Preferences
+                    </span>
+
+                    <span class="arrow">
+                        ⌃
+                    </span>
+
+                </div>
+
+            </button>
+
+
+            <div
+                class="submenu"
+                id="submenu"
+            >
+
+                <a href="/student/live-basket-filling">
+
+                    Live Basket Filling
+
+                </a>
+
+
+                <a href="/student/section-preferences">
+
+                    Preferred Sections
+
+                </a>
+
+            </div>
+
+        </li>
+
+
+        <!-- ALLOCATION STATUS -->
+
+        <li class="menu-item">
+
+            <a
+                href="/student/allocation-status"
+                class="menu-link"
+            >
+
+                <span class="icon">
+                    ◔
+                </span>
+
+                <span>
+                    Allocation Status
+                </span>
+
+            </a>
+
+        </li>
+
+
+    </ul>
+
+
+
+    <!-- LOGOUT -->
+
+    <div class="logout">
+
+        <a
+            href="/"
+            class="menu-link"
+        >
+
+            <span class="icon">
+                ↪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+
+    <!-- ================= TOP BAR ================= -->
+
+    <div class="topbar">
+
+
+        <div class="profile-area">
+
+
+            <div class="notification"></div>
+
+
+            <div class="avatar">
+                👤
+            </div>
+
+
+            <div class="user-details">
+
+                <div class="user-name">
+                    Preethi Rao
+                </div>
+
+                <div class="user-id">
+                    24STUCHH010618
+                </div>
+
+            </div>
+
+
+            <span class="top-arrow">
+                ▼
+            </span>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= CONTENT ================= -->
+
+    <div class="content">
+
+
+        <!-- ================= WELCOME ================= -->
+
+        <div class="welcome-card">
+
+
+            <div>
+
+                <h1>
+                    Hello, Preethi! 👋
+                </h1>
+
+                <p>
+                    Welcome to the Multi-Section Management System.
+                </p>
+
+            </div>
+
+
+            <div class="welcome-image">
+                🎓
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= SUMMARY CARDS ================= -->
+
+        <div class="cards">
+
+
+            <!-- ALLOCATION -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    ◷
+                </div>
+
+                <div class="card-title">
+                    Allocation Status
+                </div>
+
+                <div class="card-value pending">
+                    Pending
+                </div>
+
+            </div>
+
+
+
+            <!-- SEMESTER -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    ▣
+                </div>
+
+                <div class="card-title">
+                    Current Semester
+                </div>
+
+                <div class="card-value">
+                    V Semester
+                </div>
+
+            </div>
+
+
+
+            <!-- FEE -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    ✓
+                </div>
+
+                <div class="card-title">
+                    Fee Verification
+                </div>
+
+                <div class="card-value verified">
+                    Verified
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= LOWER CONTENT ================= -->
+
+        <div class="bottom-grid">
+
+
+            <!-- PREFERENCES -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <h3>
+                        Your Section Preferences
+                    </h3>
+
+
+                    <button
+                        class="view-btn"
+                        onclick="window.location.href='/student/section-preferences'"
+                    >
+
+                        View / Edit
+
+                    </button>
+
+                </div>
+
+
+
+                <div class="panel-body">
+
+
+                    <div class="preference">
+
+
+                        <div class="preference-left">
+
+                            <span class="number">
+                                1
+                            </span>
+
+                            <span>
+                                Section A
+                            </span>
+
+                        </div>
+
+
+                        <span class="badge">
+                            1st Preference
+                        </span>
+
+
+                    </div>
+
+
+
+                    <div class="preference">
+
+
+                        <div class="preference-left">
+
+                            <span class="number">
+                                2
+                            </span>
+
+                            <span>
+                                Section B
+                            </span>
+
+                        </div>
+
+
+                        <span class="badge">
+                            2nd Preference
+                        </span>
+
+
+                    </div>
+
+
+
+                    <div class="preference">
+
+
+                        <div class="preference-left">
+
+                            <span class="number">
+                                3
+                            </span>
+
+                            <span>
+                                Section C
+                            </span>
+
+                        </div>
+
+
+                        <span class="badge">
+                            3rd Preference
+                        </span>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NOTICE -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <h3>
+                        Important Notice
+                    </h3>
+
+                </div>
+
+
+                <div class="notice-content">
+
+
+                    <div class="notice-title">
+                        📌
+                    </div>
+
+
+                    <div class="notice-title">
+                        Section allocation
+                    </div>
+
+
+                    <p class="notice-text">
+
+                        Section allocation will be performed after
+                        registration and preference submission.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+function toggleDropdown() {
+
+    const submenu =
+        document.getElementById("submenu");
+
+    const dropdown =
+        document.getElementById("sectionDropdown");
+
+    submenu.classList.toggle("show");
+
+    dropdown.classList.toggle("open");
+
+}
+
+</script>
+
+
+</body>
+
+</html>

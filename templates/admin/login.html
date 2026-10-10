@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - SectionSync</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f7fb;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            width: 420px;
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 18px;
+
+            box-shadow: 0 8px 30px rgba(37, 35, 61, 0.10);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #25233d;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .admin-badge {
+            width: 60px;
+            height: 60px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 50%;
+
+            background: #d8c5ff;
+            color: #713ce6;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #25233d;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #7845e8;
+        }
+
+        .login-btn {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #7845e8;
+            color: white;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #713ce6;
+        }
+
+        .error {
+            background: #ffecec;
+            color: #c62828;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            margin-bottom: 18px;
+
+            font-size: 13px;
+
+            text-align: center;
+        }
+
+        .back-link {
+            text-align: center;
+
+            margin-top: 22px;
+        }
+
+        .back-link a {
+            color: #7845e8;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="login-container">
+
+        <div class="logo">
+
+            <div class="admin-badge">
+                A
+            </div>
+
+            <h1>SectionSync</h1>
+
+            <p>Administrator Login</p>
+
+        </div>
+
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <form
+            action="/admin/login"
+            method="POST"
+        >
+
+            <div class="form-group">
+
+                <label for="admin_id">
+                    Admin ID
+                </label>
+
+                <input
+                    type="text"
+                    id="admin_id"
+                    name="admin_id"
+                    placeholder="Enter Admin ID"
+                    autocomplete="off"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-btn"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <div class="back-link">
+
+            <a href="/">
+                ← Back to Student Login
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

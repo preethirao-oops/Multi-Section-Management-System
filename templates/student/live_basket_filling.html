@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Live Basket Filling - SectionSync</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7fb;
+            color: #17203b;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #25233d;
+            color: white;
+            padding: 30px 14px;
+        }
+
+        .logo {
+            padding-left: 13px;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            font-size: 13px;
+            color: #d4d0e8;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 8px;
+        }
+
+        .menu-link {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            text-align: left;
+        }
+
+        .menu-link:hover {
+            background: #302d4b;
+        }
+
+        .icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Section Preferences */
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .section-header .arrow {
+            margin-left: auto;
+            font-size: 10px;
+        }
+
+        .submenu {
+            display: block;
+            margin-left: 33px;
+            border-left: 1px solid #57536d;
+            padding-left: 10px;
+        }
+
+        .submenu a {
+            display: block;
+            color: #eeeeF5;
+            text-decoration: none;
+            padding: 10px;
+            font-size: 13px;
+            border-radius: 5px;
+        }
+
+        .submenu a:hover {
+            background: #302d4b;
+        }
+
+        .submenu a.active-sub {
+            background: #302d4b;
+            color: white;
+        }
+
+        /* Logout */
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 14px;
+            right: 14px;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        /* ================= TOP BAR ================= */
+
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 28px;
+            border-bottom: 1px solid #e5e3eb;
+        }
+
+        .profile-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification {
+            width: 20px;
+            height: 20px;
+            background: #e23851;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #eeeafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 21px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: #71809b;
+            margin-top: 3px;
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            padding: 30px 35px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            color: #172b51;
+            margin-bottom: 7px;
+        }
+
+        .page-title p {
+            font-size: 14px;
+            color: #71809b;
+        }
+
+        /* ================= LIVE BOX ================= */
+
+        .live-box {
+            background: white;
+            border: 1px solid #e2dfea;
+            border-radius: 13px;
+            padding: 22px;
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .live-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .live-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            background: #eee8ff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #713ce6;
+            font-size: 19px;
+        }
+
+        .live-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .live-text {
+            font-size: 12px;
+            color: #71809b;
+        }
+
+        .live-status {
+            color: #15966a;
+            background: #e7f6ef;
+            padding: 7px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* ================= SECTION TABLE ================= */
+
+        .panel {
+            background: white;
+            border: 1px solid #e2dfea;
+            border-radius: 13px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e8e5ee;
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+        }
+
+        .panel-header p {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #71809b;
+        }
+
+        .section-row {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr 1fr 1.2fr 1fr;
+
+            align-items: center;
+
+            padding: 17px 22px;
+
+            border-bottom: 1px solid #eeeef3;
+
+            font-size: 13px;
+        }
+
+        .section-row:last-child {
+            border-bottom: none;
+        }
+
+        .section-name {
+            font-weight: bold;
+        }
+
+        .program {
+            color: #59657d;
+        }
+
+        .capacity {
+            color: #71809b;
+        }
+
+        /* ================= PROGRESS ================= */
+
+        .progress-container {
+            width: 130px;
+        }
+
+        .progress {
+            height: 7px;
+            background: #eeeaf5;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #7845e8;
+            border-radius: 10px;
+        }
+
+        .filled {
+            font-size: 11px;
+            color: #71809b;
+            margin-top: 5px;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            color: #15966a;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .almost-full {
+            color: #d98b00;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+            }
+
+            .section-row {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 15px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .topbar {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .section-row {
+                grid-template-columns: 1fr;
+            }
+
+            .live-box {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        <h1>SectionSync</h1>
+        <p>Student Portal</p>
+    </div>
+
+    <ul class="menu">
+
+        <!-- Dashboard -->
+        <li class="menu-item">
+            <a href="/student/dashboard" class="menu-link">
+                <span class="icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <!-- Profile -->
+        <li class="menu-item">
+            <a href="/student/profile" class="menu-link">
+                <span class="icon">●</span>
+                <span>My Profile</span>
+            </a>
+        </li>
+
+        <!-- Fee Verification -->
+        <li class="menu-item">
+            <a href="/student/fee-verification" class="menu-link">
+                <span class="icon">▣</span>
+                <span>Fee Verification</span>
+            </a>
+        </li>
+
+        <!-- Section Preferences -->
+        <li class="menu-item">
+
+            <div class="menu-link">
+
+                <div class="section-header">
+
+                    <span class="icon">▣</span>
+
+                    <span>Section Preferences</span>
+
+                    <span class="arrow">⌃</span>
+
+                </div>
+
+            </div>
+
+            <div class="submenu">
+
+                <a href="/student/live-basket-filling" 
+                    class="active-sub">
+
+                    Live Basket Filling
+
+                </a>
+
+                <a href="/student/section-preferences">
+                    Preferred Sections
+
+                </a>
+
+            </div>
+
+        </li>
+
+        <!-- Allocation Status -->
+        <li class="menu-item">
+
+            <a href="/student/allocation-status"
+               class="menu-link">
+
+                <span class="icon">◔</span>
+
+                <span>Allocation Status</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+
+    <!-- Logout -->
+
+    <div class="logout">
+
+        <a href="/"
+           class="menu-link">
+
+            <span class="icon">↪</span>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="main">
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <div class="profile-area">
+
+            <div class="notification"></div>
+
+            <div class="avatar">
+                👤
+            </div>
+
+            <div>
+
+                <div class="user-name">
+                    Preethi Rao
+                </div>
+
+                <div class="user-id">
+                    24STUCHH010618
+                </div>
+
+            </div>
+
+            <span>▼</span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CONTENT
+    ================================================= -->
+
+    <div class="content">
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-title">
+
+            <h1>Live Basket Filling</h1>
+
+            <p>
+                View the current seat availability of all sections.
+            </p>
+
+        </div>
+
+
+        <!-- LIVE STATUS -->
+
+        <div class="live-box">
+
+            <div class="live-left">
+
+                <div class="live-icon">
+                    ◉
+                </div>
+
+                <div>
+
+                    <div class="live-title">
+                        Live Section Availability
+                    </div>
+
+                    <div class="live-text">
+                        Seat availability is updated as students fill
+                        their section preferences.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="live-status">
+                ● LIVE
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ALL SECTIONS A-O
+        ================================================= -->
+
+        <div class="panel">
+
+
+            <div class="panel-header">
+
+                <h3>
+                    Current Section Capacity
+                </h3>
+
+                <p>
+                    All sections are visible. Availability is shown
+                    for information before preference submission.
+                </p>
+
+            </div>
+
+
+            <!-- TABLE HEADER -->
+
+            <div class="section-row">
+
+                <strong>Section</strong>
+
+                <strong>Program</strong>
+
+                <strong>Capacity</strong>
+
+                <strong>Filled</strong>
+
+                <strong>Status</strong>
+
+            </div>
+
+
+            <!-- SECTION A -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section A</div>
+
+                <div class="program">CSE</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:70%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        42 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION B -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section B</div>
+
+                <div class="program">CSE</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:85%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        51 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION C -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section C</div>
+
+                <div class="program">CSE</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:95%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        57 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status almost-full">
+                    Almost Full
+                </div>
+
+            </div>
+
+
+            <!-- SECTION D -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section D</div>
+
+                <div class="program">CSE</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:55%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        33 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION E -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section E</div>
+
+                <div class="program">AI&DS</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:60%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        36 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION F -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section F</div>
+
+                <div class="program">AI&DS</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:75%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        45 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION G -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section G</div>
+
+                <div class="program">AI&DS</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:90%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        54 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status almost-full">
+                    Almost Full
+                </div>
+
+            </div>
+
+
+            <!-- SECTION H -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section H</div>
+
+                <div class="program">AI&ML</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:50%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        30 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION I -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section I</div>
+
+                <div class="program">AI&ML</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:68%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        41 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION J -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section J</div>
+
+                <div class="program">AI</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:80%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        48 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION K -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section K</div>
+
+                <div class="program">AI</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:92%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        55 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status almost-full">
+                    Almost Full
+                </div>
+
+            </div>
+
+
+            <!-- SECTION L -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section L</div>
+
+                <div class="program">EEE</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:58%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        35 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION M -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section M</div>
+
+                <div class="program">EEE</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:72%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        43 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION N -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section N</div>
+
+                <div class="program">ECE</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:63%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        38 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+
+            <!-- SECTION O -->
+
+            <div class="section-row">
+
+                <div class="section-name">Section O</div>
+
+                <div class="program">ECE</div>
+
+                <div class="capacity">60 seats</div>
+
+                <div class="progress-container">
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:88%;">
+                        </div>
+                    </div>
+
+                    <div class="filled">
+                        53 / 60 filled
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    Available
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

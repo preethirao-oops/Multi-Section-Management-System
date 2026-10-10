@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fee Status Verified - SectionSync</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f7fb;
+            color: #25233d;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #25233d;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            padding: 10px 15px 30px;
+        }
+
+        .logo h1 {
+            font-size: 25px;
+        }
+
+        .logo p {
+            font-size: 13px;
+            color: #b9b6c9;
+            margin-top: 5px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 8px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 15px;
+            color: #ddd;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .menu-link:hover {
+            background: rgba(216, 197, 255, 0.12);
+        }
+
+        .icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+        }
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .topbar h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .topbar p {
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e7e5ef;
+            border-radius: 14px;
+            padding: 35px;
+            max-width: 700px;
+            box-shadow: 0 5px 20px rgba(37, 35, 61, 0.05);
+        }
+
+        .success-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #e9ddff;
+            color: #713ce6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .success-text {
+            color: #666;
+            margin-bottom: 28px;
+        }
+
+        .details {
+            background: #f7f7fb;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e3eb;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #777;
+        }
+
+        .value {
+            font-weight: 600;
+        }
+
+        .verified {
+            color: #238636;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 22px;
+            background: #7845e8;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back-btn:hover {
+            background: #713ce6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <div class="logo">
+            <h1>SectionSync</h1>
+            <p>Student Portal</p>
+        </div>
+
+        <ul class="menu">
+
+            <li class="menu-item">
+                <a href="/student/dashboard" class="menu-link">
+                    <span class="icon">⌂</span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="/student/profile" class="menu-link">
+                    <span class="icon">●</span>
+                    <span>My Profile</span>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="/student/fee-verification" class="menu-link">
+                    <span class="icon">▣</span>
+                    <span>Fee Verification</span>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="/student/live-basket-filling" class="menu-link">
+                    <span class="icon">▣</span>
+                    <span>Live Basket Filling</span>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="/student/section-preferences" class="menu-link">
+                    <span class="icon">▣</span>
+                    <span>Preferred Sections</span>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="/student/allocation-status" class="menu-link">
+                    <span class="icon">◔</span>
+                    <span>Allocation Status</span>
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="logout">
+            <a href="/" class="menu-link">
+                <span class="icon">↪</span>
+                <span>Logout</span>
+            </a>
+        </div>
+
+    </div>
+
+
+    <div class="main">
+
+        <div class="topbar">
+            <h2>Fee Verification</h2>
+            <p>Student fee payment verification</p>
+        </div>
+
+        <div class="card">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h3>Fee Status Verified</h3>
+
+            <p class="success-text">
+                Your fee payment has been successfully verified.
+            </p>
+
+            <div class="details">
+
+                <div class="detail-row">
+                    <span class="label">Student Name</span>
+                    <span class="value">{{ student_name }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="label">Enrollment Number</span>
+                    <span class="value">{{ enrollment_no }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="label">Order ID</span>
+                    <span class="value">{{ order_id }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="label">Payment Status</span>
+                    <span class="verified">Verified</span>
+                </div>
+
+            </div>
+
+            <a href="/student/dashboard" class="back-btn">
+                Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

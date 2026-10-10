@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fee Verification | SectionSync</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f7fb;
+            color: #17152b;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #25233d;
+            padding: 28px 18px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 8px 12px 45px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: #d8a64f;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            line-height: 1;
+        }
+
+        .logo-subtitle {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            color: #bdb9ca;
+            margin-top: 5px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin-bottom: 6px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px 15px;
+            color: #c9c6d4;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover {
+            background: #34314f;
+            color: white;
+        }
+
+        .menu a.active {
+            background: #d8c5ff;
+            color: #25233d;
+            font-weight: 600;
+        }
+
+        .section-heading {
+            color: #8e8a9e;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 25px 15px 8px;
+        }
+
+        .sub-link {
+            padding-left: 30px !important;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 32px 42px;
+        }
+
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-heading h1 {
+            font-size: 27px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .page-heading p {
+            color: #77758a;
+            font-size: 14px;
+        }
+
+        .student-badge {
+            background: white;
+            border: 1px solid #e5e3eb;
+            border-radius: 9px;
+            padding: 11px 16px;
+            color: #77758a;
+            font-size: 13px;
+        }
+
+        .student-badge strong {
+            color: #25233d;
+        }
+
+
+        /* =========================
+           CONTENT CARD
+        ========================= */
+
+        .card {
+            background: white;
+            border: 1px solid #e7e5ee;
+            border-radius: 13px;
+            padding: 32px;
+            max-width: 850px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: #eee8ff;
+            color: #7845e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .card-header p {
+            color: #888598;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           INSTRUCTION
+        ========================= */
+
+        .instruction {
+            background: #f8f6ff;
+            border: 1px solid #e8e1ff;
+            border-radius: 9px;
+            padding: 16px 18px;
+            margin-bottom: 28px;
+        }
+
+        .instruction-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3b3652;
+            margin-bottom: 5px;
+        }
+
+        .instruction-text {
+            font-size: 13px;
+            color: #77758a;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 48px;
+            border: 1px solid #dcd9e6;
+            border-radius: 8px;
+            padding: 0 15px;
+            font-size: 14px;
+            color: #25233d;
+            background: white;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #7845e8;
+            box-shadow: 0 0 0 3px rgba(120, 69, 232, 0.08);
+        }
+
+        .hint {
+            margin-top: 7px;
+            font-size: 12px;
+            color: #898699;
+        }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .button-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 5px;
+        }
+
+        .verify-button {
+            background: #713ce6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 13px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .verify-button:hover {
+            background: #6331d0;
+        }
+
+
+        /* =========================
+           PAYMENT DETAILS
+        ========================= */
+
+        .payment-note {
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid #eeeef3;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .note-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #eee8ff;
+            color: #7845e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .payment-note h3 {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .payment-note p {
+            font-size: 12px;
+            color: #858293;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+                padding: 25px;
+            }
+
+            .student-badge {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ▦
+            </div>
+
+            <div class="logo-text">
+
+                SectionSync
+
+                <span class="logo-subtitle">
+                    Multi-Section Management System
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <ul class="menu">
+
+            <li>
+                <a href="/student/dashboard">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    My Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="/student/fee-verification" class="active">
+                    Fee Verification
+                </a>
+            </li>
+
+
+            <div class="section-heading">
+                Section Preferences ˄
+            </div>
+
+
+            <li>
+                <a href="/student/live-basket-filling" class="sub-link">
+                    Live Basket Filling
+                </a>
+            </li>
+
+            <li>
+                <a href="/student/section-preferences" class="sub-link">
+                    Preferred Sections
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    Allocation Status
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/">
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="main">
+
+
+        <!-- TOP BAR -->
+
+        <div class="topbar">
+
+            <div class="page-heading">
+
+                <h1>
+                    Fee Verification
+                </h1>
+
+                <p>
+                    Verify your fee payment before proceeding with section preferences.
+                </p>
+
+            </div>
+
+
+            <div class="student-badge">
+
+                Student ID:
+                <strong>24STUCHH010618</strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CARD -->
+
+        <div class="card">
+
+
+            <!-- CARD HEADER -->
+
+            <div class="card-header">
+
+                <div class="card-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <h2>
+                        Verify Fee Payment
+                    </h2>
+
+                    <p>
+                        Confirm your payment using the Order ID.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- INSTRUCTION -->
+
+            <div class="instruction">
+
+                <div class="instruction-title">
+                    Before you continue
+                </div>
+
+                <div class="instruction-text">
+
+                    Enter the Order ID received in your college payment confirmation
+                    email. The system will verify it against the payment records.
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FORM -->
+
+            <form action="/student/fee-verification" method="POST">
+
+
+                <div class="form-group">
+
+                    <label for="order_id">
+                        Order ID
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="order_id"
+                        name="order_id"
+                        placeholder="Enter your Order ID"
+                        autocomplete="off"
+                        required
+                    >
+
+
+                    <div class="hint">
+                        Order ID received from your college payment confirmation email.
+                    </div>
+
+                </div>
+
+
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        class="verify-button"
+                    >
+                        Verify Fee Payment
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+
+            <!-- NOTE -->
+
+            <div class="payment-note">
+
+                <div class="note-icon">
+                    i
+                </div>
+
+                <div>
+
+                    <h3>
+                        Payment verification
+                    </h3>
+
+                    <p>
+                        Your Order ID is checked against the college payment database.
+                        Once the payment is verified, you can continue to Section Preferences.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</body>
+
+</html>

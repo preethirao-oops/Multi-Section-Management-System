@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferred Sections - SectionSync</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f7f7fb;
+            color: #25233d;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #25233d;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            padding-left: 15px;
+            margin-bottom: 5px;
+        }
+
+        .portal {
+            color: #aaa8bd;
+            font-size: 13px;
+            padding-left: 16px;
+            margin-bottom: 35px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 15px;
+            margin: 6px 0;
+            color: #d6d4df;
+            text-decoration: none;
+            border-radius: 9px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #34314f;
+        }
+
+        .nav-link.active {
+            background: #d8c5ff;
+            color: #25233d;
+            font-weight: 600;
+        }
+
+        .icon {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        /* SECTION PREFERENCES DROPDOWN */
+        .section-menu {
+            margin: 6px 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 15px;
+            color: #d6d4df;
+            font-size: 14px;
+            border-radius: 9px;
+        }
+
+        .section-title-left {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .arrow {
+            font-size: 12px;
+        }
+
+        .submenu {
+            margin-left: 35px;
+            margin-top: 3px;
+        }
+
+        .submenu a {
+            display: block;
+            padding: 10px 12px;
+            margin: 3px 0;
+            color: #aaa8bd;
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 7px;
+        }
+
+        .submenu a:hover {
+            color: white;
+            background: #34314f;
+        }
+
+        .submenu a.active {
+            color: white;
+            background: #34314f;
+            font-weight: 600;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e8e7ee;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 35px;
+        }
+
+        .profile-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification {
+            position: relative;
+            font-size: 21px;
+            margin-right: 12px;
+        }
+
+        .notification-dot {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: #7845e8;
+            border-radius: 50%;
+            top: 1px;
+            right: 0;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #d8c5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #5c35b5;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-id {
+            font-size: 11px;
+            color: #8a8897;
+            margin-top: 2px;
+        }
+
+        /* PAGE */
+        .content {
+            padding: 35px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .page-heading p {
+            color: #777587;
+            font-size: 14px;
+        }
+
+        /* PROGRAM CARD */
+        .program-card {
+            background: white;
+            border: 1px solid #e8e7ee;
+            border-radius: 12px;
+            padding: 22px 25px;
+            margin-bottom: 20px;
+        }
+
+        .program-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .program-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .program-badge {
+            background: #eee7ff;
+            color: #713ce6;
+            padding: 8px 15px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .program-text {
+            color: #777587;
+            font-size: 13px;
+        }
+
+        /* PREFERENCE CARD */
+        .preference-card {
+            background: white;
+            border: 1px solid #e8e7ee;
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        .card-heading {
+            margin-bottom: 25px;
+        }
+
+        .card-heading h2 {
+            font-size: 19px;
+            margin-bottom: 6px;
+        }
+
+        .card-heading p {
+            color: #858391;
+            font-size: 13px;
+        }
+
+        /* PREFERENCE ROW */
+        .preference-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+
+        .preference-number {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #eee7ff;
+            color: #713ce6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .preference-label {
+            width: 145px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .select-wrapper {
+            flex: 1;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #dddbe5;
+            border-radius: 8px;
+            background: white;
+            color: #353346;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: #7845e8;
+        }
+
+        /* NOTE */
+        .note {
+            background: #f7f3ff;
+            border-left: 4px solid #7845e8;
+            padding: 14px 16px;
+            margin-top: 25px;
+            border-radius: 6px;
+            color: #5c5870;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* BUTTON */
+        .button-area {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .save-btn {
+            border: none;
+            background: #7845e8;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .save-btn:hover {
+            background: #6335c8;
+        }
+
+        /* SUCCESS MESSAGE */
+        .success-message {
+            display: none;
+            margin-top: 18px;
+            padding: 12px 15px;
+            border-radius: 7px;
+            background: #edf9f0;
+            color: #287a3e;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .preference-row {
+                gap: 12px;
+            }
+
+            .preference-label {
+                width: 120px;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .header {
+                padding: 0 20px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .preference-row {
+                flex-wrap: wrap;
+            }
+
+            .preference-label {
+                width: auto;
+                flex: 1;
+            }
+
+            .select-wrapper {
+                width: 100%;
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="logo">SectionSync</div>
+        <div class="portal">Student Portal</div>
+
+        <a href="/student/dashboard" class="nav-link">
+            <span class="icon">⌂</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="/student/profile" class="nav-link">
+            <span class="icon">◉</span>
+            <span>My Profile</span>
+        </a>
+
+        <a href="/student/fee-verification" class="nav-link">
+            <span class="icon">▣</span>
+            <span>Fee Verification</span>
+        </a>
+
+        <!-- SECTION PREFERENCES -->
+        <div class="section-menu">
+
+            <div class="section-title">
+                <div class="section-title-left">
+                    <span class="icon">☷</span>
+                    <span>Section Preferences</span>
+                </div>
+
+                <span class="arrow">⌃</span>
+            </div>
+
+            <div class="submenu">
+
+                <a href="/student/live-basket-filling">
+                    Live Basket Filling
+                </a>
+
+                <a href="/student/section-preferences" class="active">
+                    Preferred Sections
+                </a>
+
+            </div>
+
+        </div>
+
+        <a href="/student/allocation-status" class="nav-link">
+            <span class="icon">✓</span>
+            <span>Allocation Status</span>
+        </a>
+
+        <a href="/" class="nav-link">
+            <span class="icon">↪</span>
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- HEADER -->
+        <div class="header">
+
+            <div class="profile-area">
+
+                <div class="notification">
+                    ♧
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="avatar">
+                    P
+                </div>
+
+                <div>
+                    <div class="profile-name">Preethi Rao</div>
+                    <div class="profile-id">24STUCHH010618</div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+        <div class="content">
+
+            <div class="page-heading">
+                <h1>Preferred Sections</h1>
+                <p>Select and arrange your preferred sections in the order you want.</p>
+            </div>
+
+
+            <!-- PROGRAM -->
+            <div class="program-card">
+
+                <h3>Your Program</h3>
+
+                <div class="program-info">
+
+                    <span class="program-badge">
+                        CSE
+                    </span>
+
+                    <span class="program-text">
+                        You can select sections available for your program.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREFERENCES -->
+            <div class="preference-card">
+
+                <div class="card-heading">
+                    <h2>Section Preferences</h2>
+
+                    <p>
+                        Choose your preferred sections from highest to lowest priority.
+                    </p>
+                </div>
+
+
+                <!-- 1ST PREFERENCE -->
+                <div class="preference-row">
+
+                    <div class="preference-number">
+                        1
+                    </div>
+
+                    <div class="preference-label">
+                        1st Preference
+                    </div>
+
+                    <div class="select-wrapper">
+
+                        <select class="section-select">
+                            <option value="">Select Section</option>
+                            <option value="A">CSE - A</option>
+                            <option value="B">CSE - B</option>
+                            <option value="C">CSE - C</option>
+                            <option value="D">CSE - D</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 2ND PREFERENCE -->
+                <div class="preference-row">
+
+                    <div class="preference-number">
+                        2
+                    </div>
+
+                    <div class="preference-label">
+                        2nd Preference
+                    </div>
+
+                    <div class="select-wrapper">
+
+                        <select class="section-select">
+                            <option value="">Select Section</option>
+                            <option value="A">CSE - A</option>
+                            <option value="B">CSE - B</option>
+                            <option value="C">CSE - C</option>
+                            <option value="D">CSE - D</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 3RD PREFERENCE -->
+                <div class="preference-row">
+
+                    <div class="preference-number">
+                        3
+                    </div>
+
+                    <div class="preference-label">
+                        3rd Preference
+                    </div>
+
+                    <div class="select-wrapper">
+
+                        <select class="section-select">
+                            <option value="">Select Section</option>
+                            <option value="A">CSE - A</option>
+                            <option value="B">CSE - B</option>
+                            <option value="C">CSE - C</option>
+                            <option value="D">CSE - D</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 4TH PREFERENCE -->
+                <div class="preference-row">
+
+                    <div class="preference-number">
+                        4
+                    </div>
+
+                    <div class="preference-label">
+                        4th Preference
+                    </div>
+
+                    <div class="select-wrapper">
+
+                        <select class="section-select">
+                            <option value="">Select Section</option>
+                            <option value="A">CSE - A</option>
+                            <option value="B">CSE - B</option>
+                            <option value="C">CSE - C</option>
+                            <option value="D">CSE - D</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOTE -->
+                <div class="note">
+                    <strong>Note:</strong>
+                    Select each section only once. Your preferences will be considered
+                    during the automatic section allocation process based on availability,
+                    capacity, and other allocation rules.
+                </div>
+
+
+                <!-- SUCCESS MESSAGE -->
+                <div class="success-message" id="successMessage">
+                    ✓ Your section preferences have been saved successfully.
+                </div>
+
+
+                <!-- BUTTON -->
+                <div class="button-area">
+
+                    <button class="save-btn" onclick="savePreferences()">
+                        Save Preferences
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        const selects = document.querySelectorAll(".section-select");
+
+        // Prevent the same section from being selected twice
+        selects.forEach(select => {
+
+            select.addEventListener("change", function () {
+
+                const selectedValues = [];
+
+                selects.forEach(item => {
+                    if (item.value !== "") {
+                        selectedValues.push(item.value);
+                    }
+                });
+
+                const duplicates =
+                    selectedValues.filter(
+                        (value, index) =>
+                            selectedValues.indexOf(value) !== index
+                    );
+
+                if (duplicates.length > 0) {
+
+                    alert("You have already selected this section. Please choose another section.");
+
+                    this.value = "";
+                }
+
+            });
+
+        });
+
+
+        function savePreferences() {
+
+            let selected = [];
+
+            selects.forEach(select => {
+
+                if (select.value !== "") {
+                    selected.push(select.value);
+                }
+
+            });
+
+            if (selected.length === 0) {
+
+                alert("Please select at least one preferred section.");
+                return;
+
+            }
+
+            const successMessage =
+                document.getElementById("successMessage");
+
+            successMessage.style.display = "block";
+
+            successMessage.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+        }
+
+    </script>
+
+</body>
+</html>

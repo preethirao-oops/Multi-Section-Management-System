@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - SectionSync</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f7fb;
+            color: #27263a;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #25233d;
+            color: white;
+            padding: 25px 15px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .panel-name {
+            text-align: center;
+            color: #bdb9d2;
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+
+        .menu-title {
+            color: #9692ad;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 18px 10px 8px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #d8d5e4;
+            padding: 11px 14px;
+            margin: 3px 0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #353250;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background: #d8c5ff;
+            color: #25233d;
+            font-weight: bold;
+        }
+
+        .submenu a {
+            padding-left: 32px;
+            font-size: 13px;
+        }
+
+        .logout {
+            margin-top: 25px !important;
+            color: #ffb6b6 !important;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            margin-left: 250px;
+            padding: 35px 40px;
+            min-height: 100vh;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            margin-bottom: 7px;
+        }
+
+        .page-title p {
+            color: #77758a;
+            font-size: 14px;
+        }
+
+        .admin-badge {
+            background: white;
+            border: 1px solid #e6e3ef;
+            padding: 10px 17px;
+            border-radius: 10px;
+            color: #6240b8;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* WELCOME CARD */
+        .welcome-card {
+            background: linear-gradient(135deg, #7845e8, #713ce6);
+            color: white;
+            border-radius: 16px;
+            padding: 32px 35px;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(113, 60, 230, 0.15);
+        }
+
+        .welcome-card h2 {
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.92;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+                padding: 25px 20px;
+            }
+
+            .top-section {
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .admin-badge {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="logo">
+            SectionSync
+        </div>
+
+        <div class="panel-name">
+            Administrator Panel
+        </div>
+
+
+        <!-- DASHBOARD -->
+        <a href="/admin/dashboard" class="active">
+            Dashboard
+        </a>
+
+
+        <!-- ADMIN PROFILE -->
+        <a href="/admin/profile">
+            Admin Profile
+        </a>
+
+
+        <!-- STUDENT MANAGEMENT -->
+        <div class="menu-title">
+            Student Management
+        </div>
+
+        <div class="submenu">
+
+            <a href="/admin/student-management">
+                Student Management
+            </a>
+
+            <a href="/admin/edit-students">
+                Edit Student Details
+            </a>
+
+        </div>
+
+
+        <!-- SECTION MANAGEMENT -->
+        <div class="menu-title">
+            Section Management
+        </div>
+
+        <div class="submenu">
+
+            <a href="/admin/section-capacity">
+                Section Capacity
+            </a>
+
+            <a href="/admin/cgpa-constraints">
+                CGPA Constraints
+            </a>
+
+        </div>
+
+
+        <!-- OTHER ADMIN MODULES -->
+        <a href="/admin/preferences">
+            Student Preferences
+        </a>
+
+        <a href="/admin/allocation">
+            Final Allocation
+        </a>
+
+        <a href="/admin/subjects-faculty">
+            Subjects & Faculty
+        </a>
+
+        <a href="/admin/statistics">
+            Allocation Statistics
+        </a>
+
+
+        <!-- LOGOUT -->
+        <a href="/admin/login" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- HEADER -->
+        <div class="top-section">
+
+            <div class="page-title">
+
+                <h1>
+                    Admin Dashboard
+                </h1>
+
+                <p>
+                    Manage students, sections, preferences and allocation
+                    through SectionSync.
+                </p>
+
+            </div>
+
+
+            <div class="admin-badge">
+                Administrator
+            </div>
+
+        </div>
+
+
+        <!-- WELCOME CARD -->
+        <div class="welcome-card">
+
+            <h2>
+                Welcome to SectionSync Admin Panel
+            </h2>
+
+            <p>
+                Manage student information, sections, preferences and
+                allocation from the administrator panel.
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
