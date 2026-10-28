@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Sections - SectionSync</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f4f6fa; color: #18345d; }
+        .header { height: 76px; background: white; border-bottom: 1px solid #dfe3ea; display: flex; align-items: center; justify-content: space-between; padding: 0 35px; }
+        .header h1 { font-size: 26px; color: #15365f; }
+        .header-right { font-size: 14px; color: #15365f; }
+        .header-right span { margin: 0 10px; color: #777; }
+        .main { padding: 30px; max-width: 1400px; margin: auto; }
+        .page-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .page-heading h2 { font-size: 24px; margin-bottom: 6px; }
+        .page-heading p { color: #64748b; font-size: 15px; }
+        .back-btn, .primary-btn { display: inline-block; background: #2874d8; color: white; text-decoration: none; border: 0; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .back-btn:hover, .primary-btn:hover { background: #1f63bd; }
+        .notice { padding: 14px 16px; border-radius: 8px; margin-bottom: 18px; background: #eaf2ff; color: #17375e; }
+        .notice.error { background: #fff0f0; color: #a52b2b; }
+        .card { background: white; border: 1px solid #dfe3ea; border-radius: 10px; padding: 22px; margin-bottom: 20px; }
+        .card h3 { font-size: 17px; margin-bottom: 17px; color: #17375e; }
+        .form-grid { display: grid; grid-template-columns: repeat(3, minmax(150px, 1fr)) auto; gap: 14px; align-items: end; }
+        .field label { display: block; margin-bottom: 7px; color: #52647d; font-size: 13px; font-weight: 600; }
+        .field input, .field select { width: 100%; padding: 11px 13px; background: white; border: 1px solid #cfd6e0; border-radius: 7px; color: #17375e; font-size: 14px; outline: none; }
+        .field input:focus, .field select:focus { border-color: #2874d8; }
+        .table-container { background: white; border: 1px solid #dfe3ea; border-radius: 10px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 650px; }
+        thead { background: #f5f7fa; }
+        th { text-align: left; padding: 15px; font-size: 13px; color: #17375e; font-weight: 600; border-bottom: 1px solid #dfe3ea; white-space: nowrap; }
+        td { padding: 15px; font-size: 14px; color: #17375e; border-bottom: 1px solid #e8ebef; }
+        tbody tr:hover { background: #fafbfc; }
+        .capacity { display: inline-block; padding: 6px 11px; border-radius: 20px; background: #e5edff; color: #2864c7; font-size: 12px; font-weight: 600; }
+        .empty { text-align: center; padding: 45px; color: #7b8798; font-size: 14px; }
+        .hint { margin-top: 12px; color: #7b8798; font-size: 13px; }
+        @media (max-width: 760px) {
+            .header { padding: 0 18px; }
+            .header h1 { font-size: 21px; }
+            .header-right { font-size: 12px; }
+            .main { padding: 20px; }
+            .page-heading { align-items: flex-start; gap: 15px; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Manage Sections</h1>
+        <div class="header-right">Admin <span>|</span> SectionSync</div>
+    </header>
+
+    <main class="main">
+        <div class="page-heading">
+            <div>
+                <h2>Section Management</h2>
+                <p>View sections and manage the number of seats available in each one.</p>
+            </div>
+            <a class="back-btn" href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+        </div>
+
+        {% if message %}<div class="notice">{{ message }}</div>{% endif %}
+        {% if error %}<div class="notice error">{{ error }}</div>{% endif %}
+
+        <section class="card">
+            <h3>Add a Section</h3>
+            <form method="POST" action="/admin/section-capacity" class="form-grid">
+                <div class="field">
+                    <label for="section_name">Section name</label>
+                    <input id="section_name" name="section_name" type="text" placeholder="e.g. Section A" required>
+                </div>
+                <div class="field">
+                    <label for="program">Program</label>
+                    <select id="program" name="program" required>
+                        <option value="">Select program</option>
+                        <option value="CSE">CSE</option>
+                        <option value="AI&DS">AI &amp; DS</option>
+                        <option value="AI&ML">AI &amp; ML</option>
+                        <option value="AI">AI</option>
+                        <option value="EEE">EEE</option>
+                        <option value="ECE">ECE</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="capacity">Seat capacity</label>
+                    <input id="capacity" name="capacity" type="number" min="1" placeholder="e.g. 60" required>
+                </div>
+                <button class="primary-btn" type="submit" name="action" value="add">Add Section</button>
+            </form>
+            <p class="hint">Use the table below to review section capacity and current allocation.</p>
+        </section>
+
+        <section class="table-container">
+            {% if sections %}
+            <table>
+                <thead>
+                    <tr><th>Section</th><th>Program</th><th>Seat Capacity</th><th>Allocated Students</th><th>Available Seats</th></tr>
+                </thead>
+                <tbody>
+                    {% for section in sections %}
+                    <tr>
+                        <td>{{ section['section_name'] }}</td>
+                        <td>{{ section['program'] }}</td>
+                        <td><span class="capacity">{{ section['capacity'] }}</span></td>
+                        <td>{{ section['allocated']|default(0, true) }}</td>
+                        <td>{{ section['available']|default(section['capacity'], true) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty">No sections have been added yet.</div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

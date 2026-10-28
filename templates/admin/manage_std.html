@@ -99,7 +99,8 @@
 
         /* UPLOAD BUTTON */
 
-        .upload-btn {
+        .upload-btn,
+        .back-btn {
             background: #2874d8;
 
             color: white;
@@ -115,9 +116,35 @@
             font-weight: 600;
         }
 
-        .upload-btn:hover {
+        .upload-btn:hover,
+        .back-btn:hover {
             background: #1f63bd;
         }
+
+        .heading-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        {% if message %}
+        <div style="background:#eaf2ff; padding:14px;
+                border-radius:8px; margin-bottom:18px;">
+        {{ message }}
+        </div>
+        {% endif %}
+
+        {% if upload_errors %}
+        <div style="background:#fff0f0; padding:14px;
+                border-radius:8px; margin-bottom:18px;">
+        <strong>Rows requiring attention:</strong>
+        <ul>
+            {% for error in upload_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        </div>
+        {% endif %}
 
 
         /* SEARCH AREA */
@@ -369,6 +396,10 @@
                 gap: 15px;
             }
 
+            .heading-actions {
+                flex-wrap: wrap;
+            }
+
             .search-form {
                 flex-wrap: wrap;
             }
@@ -425,18 +456,52 @@
                 </h2>
 
                 <p>
-                    View, edit and manage registered students.
+                    View, edit and manage registered students. Include a <strong>cgpa</strong> column in Excel or enter CGPA when editing a student to include them in final allocation.
                 </p>
 
             </div>
 
 
-            <a
-                href="/admin/student-upload"
-                class="upload-btn"
-            >
-                📁 Upload Excel
-            </a>
+            
+            
+<div class="heading-actions">
+<a href="{{ url_for('admin_dashboard') }}" class="back-btn">Back to Dashboard</a>
+
+<form
+    method="POST"
+    action="{{ url_for('student_management') }}"
+    enctype="multipart/form-data"
+    id="excelUploadForm"
+>
+    <input
+        type="file"
+        name="excel_file"
+        id="excelFile"
+        accept=".xlsx"
+        required
+        hidden
+    >
+            
+
+    <button type="button" class="upload-btn"
+            onclick="document.getElementById('excelFile').click()">
+        📁 Upload Excel
+    </button>
+</form>
+</div>
+
+<script>
+    document.getElementById("excelFile").addEventListener(
+        "change",
+        function () {
+            if (this.files.length > 0) {
+                document.getElementById("excelUploadForm").submit();
+            }
+        }
+    );
+</script>
+
+
 
         </div>
 
@@ -631,29 +696,21 @@
 
                         <td>
 
-                            <a
-                                href="/admin/edit-student/{{ student['id'] }}"
-                                class="edit-btn"
-                            >
-                                Edit
-                            </a>
+                           <a href="{{ url_for('edit_student', student_id=student['id']) }}"
+   class="edit-button">
+    Edit
+</a>
 
-
-                            <form
-                                method="POST"
-                                action="/admin/delete-student/{{ student['id'] }}"
-                                style="display:inline;"
-                                onsubmit="return confirm('Are you sure you want to delete this student?');"
-                            >
-
-                                <button
-                                    type="submit"
-                                    class="delete-btn"
-                                >
-                                    Delete
-                                </button>
-
-                            </form>
+<form
+    method="POST"
+    action="{{ url_for('delete_student', student_id=student['id']) }}"
+    style="display: inline;"
+    onsubmit="return confirm('Are you sure you want to delete this student?');"
+>
+    <button type="submit" class="delete-btn">
+        Delete
+    </button>
+</form>
 
                         </td>
 

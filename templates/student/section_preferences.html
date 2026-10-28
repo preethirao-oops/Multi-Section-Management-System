@@ -470,7 +470,7 @@
             <span>Allocation Status</span>
         </a>
 
-        <a href="/" class="nav-link">
+        <a href="/logout" class="nav-link">
             <span class="icon">↪</span>
             <span>Logout</span>
         </a>
@@ -496,8 +496,8 @@
                 </div>
 
                 <div>
-                    <div class="profile-name">Preethi Rao</div>
-                    <div class="profile-id">24STUCHH010618</div>
+                    <div class="profile-name">{{ student['student_name'] }}</div>
+                    <div class="profile-id">{{ student['enrollment_no'] }}</div>
                 </div>
 
             </div>
@@ -522,7 +522,7 @@
                 <div class="program-info">
 
                     <span class="program-badge">
-                        CSE
+                    {{ student['program'] }}
                     </span>
 
                     <span class="program-text">
@@ -546,108 +546,26 @@
                 </div>
 
 
-                <!-- 1ST PREFERENCE -->
-                <div class="preference-row">
+                {% if error %}<div class="note" style="background:#fff0f0;color:#a52b2b;">{{ error }}</div>{% endif %}
+                {% if message %}<div class="success-message" style="display:block;">{{ message }}</div>{% endif %}
 
-                    <div class="preference-number">
-                        1
+                <form method="POST" action="{{ url_for('section_preferences') }}" id="preferencesForm">
+                    {% for number in range(1, 5) %}
+                    <div class="preference-row">
+                        <div class="preference-number">{{ number }}</div>
+                        <div class="preference-label">
+                            {% if number == 1 %}1st{% elif number == 2 %}2nd{% elif number == 3 %}3rd{% else %}4th{% endif %} Preference
+                        </div>
+                        <div class="select-wrapper">
+                            <select class="section-select" name="preference_{{ number }}">
+                                <option value="">Select Section</option>
+                                {% for section in section_options %}
+                                <option value="{{ section }}" {% if saved_preferences.get(number) == section %}selected{% endif %}>{{ student['program'] }} - {{ section }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-
-                    <div class="preference-label">
-                        1st Preference
-                    </div>
-
-                    <div class="select-wrapper">
-
-                        <select class="section-select">
-                            <option value="">Select Section</option>
-                            <option value="A">CSE - A</option>
-                            <option value="B">CSE - B</option>
-                            <option value="C">CSE - C</option>
-                            <option value="D">CSE - D</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <!-- 2ND PREFERENCE -->
-                <div class="preference-row">
-
-                    <div class="preference-number">
-                        2
-                    </div>
-
-                    <div class="preference-label">
-                        2nd Preference
-                    </div>
-
-                    <div class="select-wrapper">
-
-                        <select class="section-select">
-                            <option value="">Select Section</option>
-                            <option value="A">CSE - A</option>
-                            <option value="B">CSE - B</option>
-                            <option value="C">CSE - C</option>
-                            <option value="D">CSE - D</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <!-- 3RD PREFERENCE -->
-                <div class="preference-row">
-
-                    <div class="preference-number">
-                        3
-                    </div>
-
-                    <div class="preference-label">
-                        3rd Preference
-                    </div>
-
-                    <div class="select-wrapper">
-
-                        <select class="section-select">
-                            <option value="">Select Section</option>
-                            <option value="A">CSE - A</option>
-                            <option value="B">CSE - B</option>
-                            <option value="C">CSE - C</option>
-                            <option value="D">CSE - D</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <!-- 4TH PREFERENCE -->
-                <div class="preference-row">
-
-                    <div class="preference-number">
-                        4
-                    </div>
-
-                    <div class="preference-label">
-                        4th Preference
-                    </div>
-
-                    <div class="select-wrapper">
-
-                        <select class="section-select">
-                            <option value="">Select Section</option>
-                            <option value="A">CSE - A</option>
-                            <option value="B">CSE - B</option>
-                            <option value="C">CSE - C</option>
-                            <option value="D">CSE - D</option>
-                        </select>
-
-                    </div>
-
-                </div>
+                    {% endfor %}
 
 
                 <!-- NOTE -->
@@ -668,11 +586,12 @@
                 <!-- BUTTON -->
                 <div class="button-area">
 
-                    <button class="save-btn" onclick="savePreferences()">
+                    <button class="save-btn" type="submit">
                         Save Preferences
                     </button>
 
                 </div>
+                </form>
 
             </div>
 

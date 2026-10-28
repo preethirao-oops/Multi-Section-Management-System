@@ -634,7 +634,7 @@
     <div class="logout">
 
         <a
-            href="/"
+            href="/logout"
             class="menu-link"
         >
 
@@ -679,11 +679,11 @@
             <div class="user-details">
 
                 <div class="user-name">
-                    Preethi Rao
+                    {{ student['student_name'] }}
                 </div>
 
                 <div class="user-id">
-                    24STUCHH010618
+                    {{ student['enrollment_no'] }}
                 </div>
 
             </div>
@@ -713,7 +713,7 @@
             <div>
 
                 <h1>
-                    Hello, Preethi! 👋
+                    Hello, {{ student['student_name'].split()[0] }}! 👋
                 </h1>
 
                 <p>
@@ -749,8 +749,8 @@
                     Allocation Status
                 </div>
 
-                <div class="card-value pending">
-                    Pending
+                <div class="card-value {{ 'verified' if allocation else 'pending' }}">
+                    {{ allocation['section_name'] if allocation else 'Pending' }}
                 </div>
 
             </div>
@@ -766,11 +766,11 @@
                 </div>
 
                 <div class="card-title">
-                    Current Semester
+                    Program
                 </div>
 
                 <div class="card-value">
-                    V Semester
+                    {{ student['program'] }}
                 </div>
 
             </div>
@@ -789,8 +789,8 @@
                     Fee Verification
                 </div>
 
-                <div class="card-value verified">
-                    Verified
+                <div class="card-value {{ 'verified' if fee_status == 'Verified' else 'pending' }}">
+                    {{ fee_status }}
                 </div>
 
             </div>
@@ -831,82 +831,17 @@
 
 
                 <div class="panel-body">
-
-
+                    {% for preference in preferences %}
                     <div class="preference">
-
-
                         <div class="preference-left">
-
-                            <span class="number">
-                                1
-                            </span>
-
-                            <span>
-                                Section A
-                            </span>
-
+                            <span class="number">{{ loop.index }}</span>
+                            <span>{{ preference['section_name'] }}</span>
                         </div>
-
-
-                        <span class="badge">
-                            1st Preference
-                        </span>
-
-
+                        <span class="badge">Preference {{ loop.index }}</span>
                     </div>
-
-
-
-                    <div class="preference">
-
-
-                        <div class="preference-left">
-
-                            <span class="number">
-                                2
-                            </span>
-
-                            <span>
-                                Section B
-                            </span>
-
-                        </div>
-
-
-                        <span class="badge">
-                            2nd Preference
-                        </span>
-
-
-                    </div>
-
-
-
-                    <div class="preference">
-
-
-                        <div class="preference-left">
-
-                            <span class="number">
-                                3
-                            </span>
-
-                            <span>
-                                Section C
-                            </span>
-
-                        </div>
-
-
-                        <span class="badge">
-                            3rd Preference
-                        </span>
-
-
-                    </div>
-
-
+                    {% else %}
+                    <p>No section preferences submitted yet.</p>
+                    {% endfor %}
                 </div>
 
             </div>
@@ -942,8 +877,11 @@
 
                     <p class="notice-text">
 
-                        Section allocation will be performed after
-                        registration and preference submission.
+                        {% if allocation %}
+                        You have been allocated to {{ allocation['section_name'] }}.
+                        {% else %}
+                        Allocation is pending until the administrator runs allocation.
+                        {% endif %}
 
                     </p>
 

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Allocation - SectionSync</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f4f6fa; color: #18345d; }
+        .header { height: 76px; background: white; border-bottom: 1px solid #dfe3ea; display: flex; align-items: center; justify-content: space-between; padding: 0 35px; }
+        .header h1 { font-size: 26px; color: #15365f; }
+        .header-right { font-size: 14px; color: #15365f; }
+        .header-right span { margin: 0 10px; color: #777; }
+        .main { padding: 30px; max-width: 1450px; margin: auto; }
+        .page-heading { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-bottom: 25px; }
+        .page-heading h2 { font-size: 24px; margin-bottom: 6px; }
+        .page-heading p { color: #64748b; font-size: 15px; }
+        .back-btn, .primary-btn { display: inline-block; background: #2874d8; color: white; text-decoration: none; border: 0; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .back-btn:hover, .primary-btn:hover { background: #1f63bd; }
+        .primary-btn { background: #17375e; }
+        .primary-btn:hover { background: #102c4d; }
+        .notice { padding: 14px 16px; border-radius: 8px; margin-bottom: 18px; background: #eaf2ff; color: #17375e; }
+        .notice.error { background: #fff0f0; color: #a52b2b; }
+        .card { background: white; border: 1px solid #dfe3ea; border-radius: 10px; padding: 22px; margin-bottom: 20px; }
+        .card h3 { font-size: 17px; margin-bottom: 10px; color: #17375e; }
+        .card p { color: #64748b; font-size: 14px; line-height: 1.6; }
+        .run-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-top: 18px; }
+        .table-title { font-size: 18px; margin: 24px 0 12px; }
+        .table-container { background: white; border: 1px solid #dfe3ea; border-radius: 10px; overflow-x: auto; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 760px; }
+        thead { background: #f5f7fa; }
+        th { text-align: left; padding: 14px; font-size: 13px; color: #17375e; font-weight: 600; border-bottom: 1px solid #dfe3ea; white-space: nowrap; }
+        td { padding: 14px; font-size: 14px; color: #17375e; border-bottom: 1px solid #e8ebef; white-space: nowrap; }
+        tbody tr:hover { background: #fafbfc; }
+        .pill { display: inline-block; padding: 6px 10px; border-radius: 18px; background: #e5edff; color: #2864c7; font-size: 12px; font-weight: 600; text-transform: capitalize; }
+        .status { color: #159447; font-weight: 600; }
+        .pending { color: #d98900; font-weight: 600; }
+        .empty { text-align: center; padding: 35px; color: #7b8798; font-size: 14px; }
+        @media (max-width: 700px) {
+            .header { padding: 0 18px; }
+            .header h1 { font-size: 21px; }
+            .header-right { font-size: 12px; }
+            .main { padding: 20px; }
+            .page-heading { align-items: flex-start; flex-direction: column; }
+            .run-row { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Final Allocation</h1>
+        <div class="header-right">Admin <span>|</span> SectionSync</div>
+    </header>
+    <main class="main">
+        <div class="page-heading">
+            <div>
+                <h2>Allocate Students to Sections</h2>
+                <p>Assignments use each program’s CGPA bands, student limits, section capacities, and saved preferences.</p>
+            </div>
+            <a class="back-btn" href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+        </div>
+
+        {% if message %}<div class="notice">{{ message }}</div>{% endif %}
+        {% if error %}<div class="notice error">{{ error }}</div>{% endif %}
+
+        <section class="card">
+            <h3>Allocation rules</h3>
+            <p>For each program, low CGPA is from the configured minimum up to the medium value; medium CGPA is from medium up to maximum; high CGPA is maximum and above. The configured student count is the maximum number selected from each band. Within each band, students with higher CGPA are considered first. Each selected student is assigned to the first preferred section that still has seats. Students without CGPA, saved preferences, an eligible band, or an available preferred seat remain unallocated.</p>
+            <div class="run-row">
+                <p>Running allocation replaces the previous allocation using the current student records and rules.</p>
+                <form method="POST" action="{{ url_for('allocation_management') }}" onsubmit="return confirm('Run allocation now? This replaces the current assignments.');">
+                    <button class="primary-btn" type="submit">Run Final Allocation</button>
+                </form>
+            </div>
+        </section>
+
+        <h3 class="table-title">Section Capacity Summary</h3>
+        <section class="table-container">
+            {% if section_summary %}
+            <table>
+                <thead><tr><th>Program</th><th>Section</th><th>Capacity</th><th>Allocated</th><th>Available</th></tr></thead>
+                <tbody>
+                    {% for section in section_summary %}
+                    <tr><td>{{ section['program'] }}</td><td>{{ section['section_name'] }}</td><td>{{ section['capacity'] }}</td><td>{{ section['allocated'] }}</td><td>{{ section['available'] }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<div class="empty">Add section capacities before running allocation.</div>{% endif %}
+        </section>
+
+        <h3 class="table-title">Student Allocation Results</h3>
+        <section class="table-container">
+            {% if allocation_rows %}
+            <table>
+                <thead><tr><th>Student</th><th>Enrollment No.</th><th>Program</th><th>CGPA</th><th>CGPA Band</th><th>Assigned Section</th><th>Status</th></tr></thead>
+                <tbody>
+                    {% for student in allocation_rows %}
+                    <tr>
+                        <td>{{ student['student_name'] }}</td>
+                        <td>{{ student['enrollment_no'] }}</td>
+                        <td>{{ student['program'] }}</td>
+                        <td>{{ '%.2f'|format(student['cgpa']) if student['cgpa'] is not none else 'Not entered' }}</td>
+                        <td>{% if student['cgpa_band'] %}<span class="pill">{{ student['cgpa_band'] }}</span>{% else %}—{% endif %}</td>
+                        <td>{{ student['section_name'] or '—' }}</td>
+                        <td>{% if student['section_name'] %}<span class="status">Allocated</span>{% else %}<span class="pending">Not allocated</span>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<div class="empty">No students are registered yet.</div>{% endif %}
+        </section>
+    </main>
+</body>
+</html>

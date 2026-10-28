@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Preferences - SectionSync</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f4f6fa; color: #18345d; }
+        .header { height: 76px; background: white; border-bottom: 1px solid #dfe3ea; display: flex; align-items: center; justify-content: space-between; padding: 0 35px; }
+        .header h1 { font-size: 26px; color: #15365f; }
+        .header-right { font-size: 14px; color: #15365f; }
+        .header-right span { margin: 0 10px; color: #777; }
+        .main { padding: 30px; max-width: 1400px; margin: auto; }
+        .page-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .page-heading h2 { font-size: 24px; margin-bottom: 6px; }
+        .page-heading p { color: #64748b; font-size: 15px; }
+        .back-btn { display: inline-block; background: #2874d8; color: white; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; }
+        .back-btn:hover { background: #1f63bd; }
+        .search-card { background: white; border: 1px solid #dfe3ea; border-radius: 10px; padding: 18px; margin-bottom: 20px; }
+        .search-form { display: flex; gap: 12px; align-items: center; }
+        .search-input { width: min(100%, 500px); padding: 11px 13px; border: 1px solid #cfd6e0; border-radius: 7px; font-size: 14px; outline: none; }
+        .search-input:focus { border-color: #2874d8; }
+        .search-button { background: #17375e; color: white; border: none; padding: 11px 20px; border-radius: 7px; font-size: 14px; cursor: pointer; }
+        .search-button:hover { background: #102c4d; }
+        .table-container { background: white; border: 1px solid #dfe3ea; border-radius: 10px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 850px; }
+        thead { background: #f5f7fa; }
+        th { text-align: left; padding: 15px; font-size: 13px; color: #17375e; font-weight: 600; border-bottom: 1px solid #dfe3ea; white-space: nowrap; }
+        td { padding: 15px; font-size: 14px; color: #17375e; border-bottom: 1px solid #e8ebef; }
+        tbody tr:hover { background: #fafbfc; }
+        .preference { display: inline-block; margin: 2px; padding: 6px 10px; border-radius: 18px; background: #e5edff; color: #2864c7; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .pending { color: #d98900; font-size: 13px; }
+        .empty { text-align: center; padding: 45px; color: #7b8798; font-size: 14px; }
+        @media (max-width: 700px) {
+            .header { padding: 0 18px; }
+            .header h1 { font-size: 21px; }
+            .header-right { font-size: 12px; }
+            .main { padding: 20px; }
+            .page-heading { align-items: flex-start; gap: 15px; }
+            .search-form { flex-wrap: wrap; }
+            .search-input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Student Preferences</h1>
+        <div class="header-right">Admin <span>|</span> SectionSync</div>
+    </header>
+    <main class="main">
+        <div class="page-heading">
+            <div>
+                <h2>Section Preferences</h2>
+                <p>Search students and review their preferred sections in priority order.</p>
+            </div>
+            <a class="back-btn" href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+        </div>
+
+        <section class="search-card">
+            <form method="GET" action="{{ url_for('admin_preferences') }}" class="search-form">
+                <input class="search-input" type="search" name="search" value="{{ search }}" placeholder="Search by student name or enrollment number">
+                <button class="search-button" type="submit">Search</button>
+                {% if search %}<a href="{{ url_for('admin_preferences') }}">Clear</a>{% endif %}
+            </form>
+        </section>
+
+        <section class="table-container">
+            {% if students %}
+            <table>
+                <thead>
+                    <tr><th>Student Name</th><th>Enrollment No.</th><th>Program</th><th>1st Preference</th><th>2nd Preference</th><th>3rd Preference</th><th>4th Preference</th></tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student['student_name'] }}</td>
+                        <td>{{ student['enrollment_no'] }}</td>
+                        <td>{{ student['program'] }}</td>
+                        {% for number in range(4) %}
+                        <td>
+                            {% if student['preferences']|length > number %}
+                            <span class="preference">{{ student['preferences'][number] }}</span>
+                            {% elif number == 0 and not student['preferences'] %}
+                            <span class="pending">Not submitted</span>
+                            {% else %}—{% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty">No students matched your search.</div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>
